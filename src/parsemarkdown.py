@@ -8,8 +8,8 @@ def text_to_textnodes(text):
     nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_url(nodes)
-    print(nodes)
     return nodes
+
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -148,7 +148,6 @@ def split_nodes_url(old_nodes):
             # Append TextNode with TextType.LINK to new_nodes
             new_nodes.append(TextNode(url[0], TextType.LINK, url_dest))
             
-            #print(f"########################################################################### {url_sections[1]}")
             old_text = url_sections[1]
 
         # if there is text after your URL, create a valid TextNode with TextType.NORMAL
@@ -157,7 +156,39 @@ def split_nodes_url(old_nodes):
 
     return new_nodes
         
-#def markdown_to_blocks(md):
+def markdown_to_blocks(md):
+    blocks = md.split("\n\n")  # Split input by double newlines
+    filtered_blocks = []
+    block_to_add = ""
+
+    for block in blocks:
+        block = block.strip()  # Remove whitespace
+        if not block:  # Skip empty blocks
+            continue
+
+        # Detect if block starts as an unordered list
+        is_unordered = block.startswith("*")
+        
+        # Detect if block starts as an ordered list (e.g., "1.", "2.")
+        is_ordered = re.match(r"^\d+[.)]", block)
+
+        if (block_to_add and is_unordered and block_to_add.startswith("*")) or \
+           (block_to_add and is_ordered and re.match(r"^\d+[.)]", block_to_add)):
+            # Same list type, append current block to the grouped block
+            block_to_add += "\n" + block
+        else:
+            # Finalize and add the last block to the result
+            if block_to_add:
+                filtered_blocks.append(block_to_add)
+            # Start a new block
+            block_to_add = block
+
+    # Add the final block after the loop
+    if block_to_add:
+        filtered_blocks.append(block_to_add)
+
+    return filtered_blocks
+
 
 
         

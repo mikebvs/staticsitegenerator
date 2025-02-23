@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType
-from parsemarkdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_url, split_nodes_image, split_nodes_url, text_to_textnodes
+from parsemarkdown import *
 
 
 class TestParseMarkdown(unittest.TestCase):
@@ -151,3 +151,20 @@ class TestParseMarkdown(unittest.TestCase):
             ]
         self.maxDiff = None
         self.assertEqual(text_to_textnodes(text), result)
+
+    def test_markdown_to_blocks(self):
+        text = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n* This is the first list item in a list block\n\n* This is a list item\n\n* This is another list item"
+        result = ['# This is a heading', 'This is a paragraph of text. It has some **bold** and *italic* words inside of it.', '* This is the first list item in a list block\n* This is a list item\n* This is another list item']
+        self.assertEqual(markdown_to_blocks(text), result)
+
+        text = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n## THIS IS A NEW BLOCK\n\n### AND A NEW BLOCK\n\n* This is the first list item in a list block\n\n* This is a list item\n\n* This is another list item"
+        result = ['# This is a heading', 'This is a paragraph of text. It has some **bold** and *italic* words inside of it.', '## THIS IS A NEW BLOCK', '### AND A NEW BLOCK', '* This is the first list item in a list block\n* This is a list item\n* This is another list item']
+        self.assertEqual(markdown_to_blocks(text), result)
+
+        text = "# BLOCK ONE\n\n## BLOCK TWO\n\n* BULLET ONE\n\n* BULLET TWO\n\nRANDOM TEXT\n\nRANDOM TEXT\n\n* RANDOM BULLET\n\n# RANDOM BLOCK"
+        result = ['# BLOCK ONE', '## BLOCK TWO', '* BULLET ONE\n* BULLET TWO', 'RANDOM TEXT', 'RANDOM TEXT', '* RANDOM BULLET', '# RANDOM BLOCK']
+        self.assertEqual(markdown_to_blocks(text), result)
+
+        text = "# WOW A HEADER\n\n1. ORDERED LIST 1\n\n2. ORDERED LIST 2\n\n3. ORDERED LIST 3\n\n* UNORDERED SNEAKY\n\n* MORE UNORDERED\n\n# MASSIVE HEADER\n\n## MORE HEADER"
+        result = ['# WOW A HEADER', '1. ORDERED LIST 1\n2. ORDERED LIST 2\n3. ORDERED LIST 3', '* UNORDERED SNEAKY\n* MORE UNORDERED', '# MASSIVE HEADER', '## MORE HEADER']
+        self.assertEqual(markdown_to_blocks(text), result)

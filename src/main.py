@@ -20,9 +20,13 @@ def main():
 #
     #print(parsemarkdown.split_nodes_url(node))
 
-    text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+    #text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+#
+    #print(parsemarkdown.text_to_textnodes(text))
 
-    print(parsemarkdown.text_to_textnodes(text))
+    text = "# WOW A HEADER\n\n1. ORDERED LIST 1\n\n2. ORDERED LIST 2\n\n3. ORDERED LIST 3\n\n* UNORDERED SNEAKY\n\n* MORE UNORDERED\n\n# MASSIVE HEADER\n\n## MORE HEADER"
 
+    lines = parsemarkdown.markdown_to_blocks(text)
+    print(lines)
 if __name__ == "__main__": 
     main()
