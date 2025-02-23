@@ -55,32 +55,3 @@ class ParentNode(HTMLNode):
 
         
         
-        '''
-        node = ParentNode(
-            "p",
-            [
-                LeafNode("b", "Bold text"),
-                LeafNode(None, "Normal text"),
-                LeafNode("i", "italic text"),
-                LeafNode(None, "Normal text"),
-                ParentNode(
-                "div",
-                    [
-                        LeafNode("b", "Bolder text"),
-                        LeafNode(None, "Normaler text"),
-                        ParentNode(
-                        "a",
-                            [
-                                LeafNode("b", "Bolder text"),
-                                LeafNode(None, "Normaler text"),
-                                LeafNode("i", "italicer text"),
-                                LeafNode(None, "Normaler text"),
-                            ],
-                        ),
-                        LeafNode("i", "italicer text"),
-                        LeafNode(None, "Normaler text"),
-                    ],
-                )
-            ],
-        )
-        '''

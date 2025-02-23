@@ -168,3 +168,7 @@ class TestParseMarkdown(unittest.TestCase):
         text = "# WOW A HEADER\n\n1. ORDERED LIST 1\n\n2. ORDERED LIST 2\n\n3. ORDERED LIST 3\n\n* UNORDERED SNEAKY\n\n* MORE UNORDERED\n\n# MASSIVE HEADER\n\n## MORE HEADER"
         result = ['# WOW A HEADER', '1. ORDERED LIST 1\n2. ORDERED LIST 2\n3. ORDERED LIST 3', '* UNORDERED SNEAKY\n* MORE UNORDERED', '# MASSIVE HEADER', '## MORE HEADER']
         self.assertEqual(markdown_to_blocks(text), result)
+        
+        text = "# This is a header\n\n`this is a code block`\n\nThis is a paragraph\n\n* This is an unordered list"
+        result = ['# This is a header', '`this is a code block`', 'This is a paragraph', '* This is an unordered list']
+        self.assertEqual(markdown_to_blocks(text), result)
