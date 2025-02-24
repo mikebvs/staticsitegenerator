@@ -3,6 +3,7 @@ from blocktype import BlockType, block_to_block_type
 from parsemarkdown import markdown_to_blocks, text_to_textnodes
 from textnode import TextNode, text_node_to_html_node
 
+
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     #print(blocks)
@@ -20,14 +21,17 @@ def markdown_to_html_node(markdown):
         elif block_type == BlockType.QUOTE:
             html_blocks.append(quote_to_html_block(block))
         elif block_type == BlockType.PARAGRAPH:
-            html_blocks.append(paragraph_to_html_block(block))
-
-
-        
-    print(f"\n\n\n\n{html_blocks}")
-    
-     
+            html_blocks.append(paragraph_to_html_block(block))    
     return html_blocks
+
+def extract_title(markdown):
+    split_doc = markdown.split("\n\n")
+    helper_func = lambda x: x.split()[0] == "#"
+    headers = list(filter(helper_func, split_doc))
+    if not headers:
+        raise Exception("No valid title element")
+    
+    return " ".join(headers[0].split()[1:])
 
 def paragraph_block_to_paragraph_html_node(block):
     #print(block)
@@ -59,7 +63,7 @@ def ol_block_to_html_node(block):
             # Add to  html_nodes
             html_nodes.append(html_node)
         # Wrap in <li> tag
-        li_node = ParentNode("li", None, html_nodes)
+        li_node = ParentNode("li", html_nodes, None)
         # Append children of <ol> container
         list_node.children.append(li_node)
     return list_node
@@ -88,7 +92,7 @@ def ul_block_to_html_node(block):
             # Add to html_nodes
             html_nodes.append(html_node)
         # Wrap in <li> tags
-        li_node = ParentNode("li", None, html_nodes)
+        li_node = ParentNode("li", html_nodes, None)
         # Append children of <ul> container
         ul_list_node.children.append(li_node)
     return ul_list_node
@@ -128,8 +132,7 @@ def quote_to_html_block(block):
         for tnode in text_nodes:
             html_node = text_node_to_html_node(tnode)
             html_children.append(html_node)
-    p_nodes = ParentNode("p", html_children)
-    quote_node.children.append(p_nodes)
+    quote_node.children = html_children
     return quote_node
 
 def paragraph_to_html_block(block):
@@ -141,5 +144,5 @@ def paragraph_to_html_block(block):
         for tnode in text_nodes:
             html_node = text_node_to_html_node(tnode)
             html_children.append(html_node)
-    outer_node.children.append(html_children)
+    outer_node.children = html_children
     return outer_node

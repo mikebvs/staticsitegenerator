@@ -8,8 +8,38 @@ class HTMLNode():
         self.props = props
 
     def to_html(self):
-        raise NotImplementedError
-    
+        html = ""
+        if self.value == None and self.children == None and self.tag != None:
+            return f"<{self.tag}></{self.tag}"    
+        elif self.value != None and self.tag != None and self.children == None:
+            return f"<{self.tag}>{self.value}</{self.tag}>"
+        
+        if self.tag == None:
+            html = ""
+            if self.value == None and self.children == None:
+                raise Exception("Invalid HTML Structure.")
+            elif self.value != None and self.children == None:
+                return f"{self.value}"
+            elif self.children != None and self.value == None:
+                html += self._render_children()
+            else:
+                html += f"{self.value}{self._render_children()}"
+            html += ""
+            return html
+        
+        if self.tag != None and self.children != None:
+            html = f"<{self.tag}>"
+            html += self._render_children()
+            html += f"</{self.tag}>"
+        return html
+
+    def _render_children(self):
+        html_return = ""
+        for children in self.children:
+            html_return += children.to_html()
+        
+        return html_return
+
     def props_to_html(self):
         if not self.props:
             return ""
@@ -40,7 +70,7 @@ class LeafNode(HTMLNode):
             return f"<{self.tag}>{self.value}</{self.tag}>"
         
     def __repr__(self):
-        return f"LeafNode({self.tag}, {self.value}, {self.props})"
+        return f"LeafNode(\"{self.tag}\", \"{self.value}\", {self.props})"
         
 class ParentNode(HTMLNode):
     def __init__(self, tag, children, props=None):
@@ -57,5 +87,5 @@ class ParentNode(HTMLNode):
         return (f"{concat_string}</{self.tag}>")
 
     def __repr__(self):
-        return f"ParentNode({self.tag}, children: {self.children}, {self.props})"
+        return f"ParentNode(\"{self.tag}\", children: {self.children}, {self.props})"
         

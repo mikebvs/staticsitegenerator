@@ -43,23 +43,3 @@ def text_node_to_html_node(text_node):
     if text_node.text_type == TextType.IMAGE:
         return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
     raise ValueError(f"invalid text type: {text_node.text_type}")
-
-    #def text_node_to_html_node(self):  # Add 'self' parameter here
-    #    print(f"Converting TextNode: {self}")
-    #    node = None
-    #    if self.text_type == TextType.NORMAL:  # Use self instead of text_node
-    #        node = htmlnode.LeafNode(None, self.text, None)
-    #    elif self.text_type == TextType.BOLD:
-    #        node = htmlnode.LeafNode("b", self.text, None)
-    #    elif self.text_type == TextType.ITALIC:
-    #        node = htmlnode.LeafNode("i", self.text, None)
-    #    elif self.text_type == TextType.CODE:
-    #        node = htmlnode.LeafNode("code", self.text, None)
-    #    elif self.text_type == TextType.LINK:
-    #        node = htmlnode.LeafNode("a", self.text, {"href": self.url})
-    #    elif self.text_type == TextType.IMAGE:
-    #        node = htmlnode.LeafNode("img", "", {"src": self.url, "alt": self.text})
-#
-    #    print(f"Created HTMLNode: {node}")
-    #    print(f"HTML output: {node.to_html()}")
-    #    return node

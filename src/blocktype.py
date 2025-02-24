@@ -15,6 +15,8 @@ def block_to_block_type(markdown_block):
         block_start = markdown_block.split()[0]
         if block_start == "#":
             return BlockType.HEADING
+        elif markdown_block.startswith('>'):
+            return BlockType.QUOTE
         elif block_start == "##":
             return BlockType.HEADING
         elif block_start == "###":
@@ -29,8 +31,6 @@ def block_to_block_type(markdown_block):
             return BlockType.UNORDERED_LIST
         elif block_start == "-":
             return BlockType.UNORDERED_LIST
-        elif block_start == ">":
-            return BlockType.QUOTE
         elif markdown_block.startswith("```") and markdown_block.endswith("```"):
             return BlockType.CODE
         elif markdown_block[0] == '`' and markdown_block[1] != '`':
