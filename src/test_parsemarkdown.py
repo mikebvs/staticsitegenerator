@@ -136,7 +136,7 @@ class TestParseMarkdown(unittest.TestCase):
         self.assertEqual(split_nodes_image(node), nodes)
 
     def test_text_to_textnode(self):
-        text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        text = "This is **text** with an *italic* word and a ```code block``` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         result = [
             TextNode("This is ", TextType.NORMAL),
             TextNode("text", TextType.BOLD),

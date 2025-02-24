@@ -5,6 +5,7 @@ def text_to_textnodes(text):
     nodes = [TextNode(text, TextType.NORMAL)]
     nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
     nodes = split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "```", TextType.CODE)
     nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_url(nodes)
@@ -13,35 +14,35 @@ def text_to_textnodes(text):
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
-    # Iterate through all nodes in the old_nodes list
-    for node in old_nodes:
-        # If the node is not normal text, append it to the new_nodes list and continue to the next node
-        if node.text_type != TextType.NORMAL:
-            new_nodes.append(node)
-        else:
-            node.text.split(delimiter)
-            delimiter_found = False
-            # Check if delimiter exists in the text
-            if delimiter in node.text:
-                # Iterate through all instances of the delimiter in the text
-                while delimiter in node.text:
-                    # If we have detected a delimiter, we need to append the text before the delimiter as a normal text node
-                    if delimiter_found == True:
-                        new_nodes.append(TextNode(node.text.split(delimiter, maxsplit=1)[0], text_type))
-                        node = TextNode(node.text.split(delimiter, maxsplit=1)[1], TextType.NORMAL)
-                        delimiter_found = False
-                    # If we have not detected a delimiter, we need to append the text before the delimiter as a normal text node
-                    else:
-                        new_nodes.append(TextNode(node.text.split(delimiter, maxsplit=1)[0], TextType.NORMAL))
-                        node = TextNode(node.text.split(delimiter, maxsplit=1)[1], text_type)
-                        delimiter_found = True
-                # Append the remaining text as a normal text node
-                new_nodes.append(node)
-            # If the delimiter does not exist, just append the node to the new_nodes list            
+    for old_node in old_nodes:
+        if old_node.text_type != TextType.NORMAL:
+            new_nodes.append(old_node)
+            continue
+        split_nodes = []
+        sections = old_node.text.split(delimiter)
+        #print(sections)
+        if len(sections) % 2 == 0:
+            raise ValueError("invalid markdown, formatted section not closed")
+        for i in range(len(sections)):
+            if sections[i] == "":
+                continue
+            if i % 2 == 0:
+                split_nodes.append(TextNode(sections[i], TextType.NORMAL))
             else:
-                new_nodes.append(node)
-
+                split_nodes.append(TextNode(sections[i].lstrip("\n").rstrip("\n"), text_type)) # Strip \n for fenced code blocks
+        new_nodes.extend(split_nodes)
     return new_nodes
+
+def split_fenced_code_block(text):
+    print("Input text:", repr(text))  # repr() shows whitespace characters
+    parts = text.strip().split("```")
+    print("Split parts:", parts)
+    if len(parts) >= 2:
+        content = parts[1]
+        return [TextNode(content.strip(), TextType.CODE)]
+    else:
+        print("Warning: Invalid code block format")
+        return [TextNode(text, TextType.NORMAL)]
 
 def extract_markdown_images(text):
     # regex_pattern = re.compile(r'<img src="[^"]*" alt="[^"]*">', re.IGNORECASE)

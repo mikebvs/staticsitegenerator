@@ -41,7 +41,7 @@ def main():
     #for block in blocks:
     #    print(blocktype.BlockType.block_to_block_type(block))
 
-    markdown = "# h1 Heading\n\n## h2 Heading\n\n### h3 Heading\n\n#### h4 Heading\n\n##### h5 Heading\n\n###### h6 Heading\n\nParagraph Text\n\n* Unordered List\n\n1. Ordered List 1\n\n2. Ordered List 2\n\n```Code Block```\n\n> Block Quote"
+    markdown = "# h1 Heading\n\n## h2 Heading with **bold** text!\n\n### h3 Heading\n\n#### h4 Heading\n\n##### h5 Heading\n\n###### h6 Heading\n\nParagraph Text with *italics* as well as some **bold** text!\n\n'this is a paragraph with a [link](https://www.google.com) in it!\n\n* Unordered List\n\n* Unordered List Again\n\n- Another Unordered List Format\n\n1. Ordered List 1\n\n2. Ordered List 2\n\n```\nThis is a fenced code block\n```\n\na paragraph\nwith a new line\n\na paragraph with ![an image](https://imageurl.com)\n\nand a very cool `Code Block` wow check that out\n\n> Block Quote\n> Many Lines\n> Very important quote"
     markdown_parser.markdown_to_html_node(markdown)
 
 if __name__ == "__main__": 

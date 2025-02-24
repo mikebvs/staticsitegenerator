@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, text_node_to_html_node
 
 
 class TestTextNode(unittest.TestCase):
@@ -31,27 +31,27 @@ class TestTextNode(unittest.TestCase):
 
     def test_text_node_to_html_node(self):
         node = TextNode("This is a text node", TextType.BOLD)
-        html_node = node.text_node_to_html_node()
+        html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.to_html(), "<b>This is a text node</b>")
 
     def test_text_node_to_html_node_italic(self):
         node = TextNode("This is a text node", TextType.ITALIC)
-        html_node = node.text_node_to_html_node()
+        html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.to_html(), "<i>This is a text node</i>")
     
     def test_text_to_html_img(self):
         node = TextNode("", TextType.IMAGE, "http://example.com")
-        html_node = node.text_node_to_html_node()
+        html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.to_html(), '<img src="http://example.com" alt="">')
 
     def test_text_to_html_img_with_value(self):
         node = TextNode("test value", TextType.IMAGE, "http://example.com")
-        html_node = node.text_node_to_html_node()
+        html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.to_html(), '<img src="http://example.com" alt="test value">')
 
     def test_text_to_html_with_link(self):
         node = TextNode("test value", TextType.LINK, "http://example.com")
-        html_node = node.text_node_to_html_node()
+        html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.to_html(), '<a href="http://example.com">test value</a>')
 
     #def test_text_to_html_invalid_type(self):
